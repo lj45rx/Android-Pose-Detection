@@ -274,6 +274,8 @@ public class PoseRecognitionActivity extends Activity {
 
                 //get result vector from cnn over cropped image
                 float[] erg_vector = mClassifier.getErgVector(croppedBitmap);
+                //normalize vector
+                erg_vector = helper.normalize(erg_vector);
 
                 //check if matrix is loaded - if not wait until it is loaded
                 if(!helper.isLoaded()){

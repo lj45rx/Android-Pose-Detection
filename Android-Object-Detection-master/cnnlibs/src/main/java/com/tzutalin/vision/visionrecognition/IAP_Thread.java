@@ -65,6 +65,34 @@ public class IAP_Thread extends Thread {
 
     //SubThread methods------------------------------------------------------------------
 
+    //methods to normalize matrix lines
+    private double mean(float[] inputLine){
+        double sum = 0;
+        for(int ii = 0; ii < inputLine.length; ii++){
+            sum += inputLine[ii];
+        }
+        return sum/inputLine.length;
+    }
+
+    private double stdDeviation(float[] inputLine, double mean){
+        double sum = 0;
+        for(int ii = 0; ii < inputLine.length; ii++){
+            double temp = inputLine[ii]-mean;
+            sum += temp*temp;
+        }
+        sum /= inputLine.length;
+        return Math.sqrt(sum);
+    }
+
+    private float[] normalize(float[] inputLine){
+        double mean = mean(inputLine);
+        double stdDev = stdDeviation(inputLine, mean);
+        for(int ii = 0; ii < inputLine.length; ii++){
+            inputLine[ii] = (float)((inputLine[ii]-mean)/stdDev);
+        }
+        return inputLine;
+    }
+
     //have SubThread get matrix line from file
     private void getLine(int lineNumber){
         //try to open file
@@ -78,8 +106,9 @@ public class IAP_Thread extends Thread {
             e.printStackTrace();
         }
 
-        //get line from the file and save it into data
+        //get line from the file, normalize and save it into data
         float res[] = gson.fromJson(reader, float[].class);
+        res = normalize(res);
         writeLine(lineNumber, res);
     }
 

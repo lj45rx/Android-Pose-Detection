@@ -194,4 +194,33 @@ public class IAP_Helper {
 
         return coords;
     }
+
+    //functions to normalize vector
+        //2 private helper functions to get mean and standard deviation
+    private double mean(float[] inputLine){
+        double sum = 0;
+        for(int ii = 0; ii < inputLine.length; ii++){
+            sum += inputLine[ii];
+        }
+        return sum/inputLine.length;
+    }
+
+    private double stdDeviation(float[] inputLine, double mean){
+        double sum = 0;
+        for(int ii = 0; ii < inputLine.length; ii++){
+            double temp = inputLine[ii]-mean;
+            sum += temp*temp;
+        }
+        sum /= inputLine.length;
+        return Math.sqrt(sum);
+    }
+
+    public float[] normalize(float[] inputLine){
+        double mean = mean(inputLine);
+        double stdDev = stdDeviation(inputLine, mean);
+        for(int ii = 0; ii < inputLine.length; ii++){
+            inputLine[ii] = (float)((inputLine[ii]-mean)/stdDev);
+        }
+        return inputLine;
+    }
 }
